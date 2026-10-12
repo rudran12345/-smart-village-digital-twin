@@ -172,7 +172,7 @@ npm run dev
 
 ## ☁️ Production Deployment on Render
 
-The root `render.yaml` defines a Render Blueprint with a React static site and a FastAPI web service. The API requires Firebase Authentication ID tokens and Cloud Firestore credentials in production; it will fail to start rather than silently use temporary local storage. The API service uses Render's Starter plan, which is paid. Review the price shown by Render before applying the Blueprint.
+The root `render.yaml` defines a Render Blueprint with a React static site and a FastAPI web service. The API requires Firebase Authentication ID tokens and Cloud Firestore credentials in production; it will fail to start rather than silently use temporary local storage. The API uses Render's Free plan, which may spin down when idle; expect a delay on its first request after inactivity. Review Render's current plan terms before applying the Blueprint.
 
 1. Create a Firebase project. Enable **Authentication > Email/Password**, create a Cloud Firestore database, and publish this repository's `firestore.rules`.
 2. Add this project to a GitHub repository and push the source. Do not commit `.env` files or service-account JSON files; the root `.gitignore` excludes them.
