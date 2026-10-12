@@ -1,0 +1,12 @@
+**/.env
+**/.env.*
+!**/.env.example
+**/venv/
+**/.venv/
+**/node_modules/
+**/dist/
+**/__pycache__/
+backend/data/local_store.json
+**/*service-account*.json
+**/*firebase-adminsdk*.json
+**/serviceAccount*.json

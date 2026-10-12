@@ -1,0 +1,16 @@
+crop_name,season,year,farm_name,area_acres,soil_type,rainfall_mm,avg_temperature_c,fertilizer_kg,crop_health_score,actual_yield_tons,yield_per_acre_tons
+Rice,Kharif,2024,Green Valley Farm,2.5,Clay,145,29.2,250,86,5.1,2.04
+Rice,Kharif,2025,Green Valley Farm,2.5,Clay,138,29.5,240,84,4.8,1.92
+Rice,Kharif,2025,Riverbank Farm,3.0,Alluvial,150,28.8,290,88,6.3,2.10
+Wheat,Rabi,2024,Sunrise Farm,2.0,Loam,80,22.4,180,82,3.4,1.70
+Wheat,Rabi,2025,Sunrise Farm,2.0,Loam,72,23.1,175,79,3.1,1.55
+Maize,Kharif,2024,Sunrise Farm,1.8,Sandy Loam,110,30.1,190,80,3.6,2.00
+Maize,Kharif,2025,Sunrise Farm,1.8,Sandy Loam,95,31.2,185,74,3.1,1.72
+Tomato,Zaid,2025,Green Valley Farm,1.0,Loam,50,32.0,140,85,9.2,9.20
+Sugarcane,Annual,2024,Riverbank Farm,4.0,Clay Loam,220,29.0,480,90,148.0,37.00
+Sugarcane,Annual,2025,Riverbank Farm,4.0,Clay Loam,195,30.5,460,83,136.0,34.00
+Rice,Kharif,2026,Green Valley Farm,2.5,Clay,125,30.2,245,82,4.7,1.88
+Tomato,Zaid,2026,Green Valley Farm,1.0,Loam,45,32.5,135,78,8.5,8.50
+Wheat,Rabi,2026,Sunrise Farm,2.2,Loam,68,23.5,180,77,3.2,1.45
+Maize,Kharif,2026,Sunrise Farm,2.0,Sandy Loam,90,31.8,190,75,3.3,1.65
+Sugarcane,Annual,2026,Riverbank Farm,4.0,Clay Loam,180,31.0,470,81,130.0,32.50

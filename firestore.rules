@@ -1,0 +1,130 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions for authentication and role verification
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && getUserData().role == 'admin';
+    }
+    
+    function isFarmer() {
+      return isAuthenticated() && (getUserData().role == 'farmer' || getUserData().role == 'admin');
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isFarmOwner(farmId) {
+      return isAuthenticated()
+        && get(/databases/$(database)/documents/farms/$(farmId)).data.ownerId == request.auth.uid;
+    }
+
+    // Users Collection
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId) && request.resource.data.role == 'farmer';
+      allow update: if isAdmin()
+        || (isOwner(userId)
+          && request.resource.data.role == resource.data.role
+          && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['name', 'phone', 'farmName', 'villageName']));
+      allow delete: if isAdmin();
+    }
+
+    // Villages Collection
+    match /villages/{villageId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Farms Collection
+    match /farms/{farmId} {
+      allow read: if isAdmin() || (isFarmer() && resource.data.ownerId == request.auth.uid);
+      allow create: if isFarmer()
+        && (isAdmin() || request.resource.data.ownerId == request.auth.uid);
+      allow update: if isAdmin()
+        || (isFarmer()
+          && resource.data.ownerId == request.auth.uid
+          && request.resource.data.ownerId == resource.data.ownerId);
+      allow delete: if isAdmin() || (isFarmer() && resource.data.ownerId == request.auth.uid);
+    }
+
+    // Fields Collection
+    match /fields/{fieldId} {
+      allow read: if isAdmin() || (isFarmer() && isFarmOwner(resource.data.farmId));
+      allow create: if isFarmer()
+        && (isAdmin() || isFarmOwner(request.resource.data.farmId));
+      allow update: if isAdmin()
+        || (isFarmer()
+          && isFarmOwner(resource.data.farmId)
+          && isFarmOwner(request.resource.data.farmId));
+      allow delete: if isAdmin() || (isFarmer() && isFarmOwner(resource.data.farmId));
+    }
+
+    // Crops Collection
+    match /crops/{cropId} {
+      allow read: if isAdmin() || (isFarmer() && isFarmOwner(resource.data.farmId));
+      allow create: if isFarmer()
+        && (isAdmin() || isFarmOwner(request.resource.data.farmId));
+      allow update: if isAdmin()
+        || (isFarmer()
+          && isFarmOwner(resource.data.farmId)
+          && isFarmOwner(request.resource.data.farmId));
+      allow delete: if isAdmin() || (isFarmer() && isFarmOwner(resource.data.farmId));
+    }
+
+    // Water Resources Collection
+    match /water_resources/{resourceId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Electricity Collection
+    match /electricity/{recordId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Weather Collection
+    match /weather/{recordId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    // Simulations Collection
+    match /simulations/{scenarioId} {
+      allow read, create: if isAuthenticated();
+      allow update, delete: if isAdmin();
+    }
+
+    // Predictions Collection
+    match /predictions/{predId} {
+      allow read, create: if isAuthenticated();
+      allow update, delete: if isAdmin();
+    }
+
+    // Alerts Collection
+    match /alerts/{alertId} {
+      allow read: if isAuthenticated();
+      allow create: if isAdmin();
+      allow update: if isAuthenticated()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']);
+      allow delete: if isAdmin();
+    }
+
+    // Recommendations Collection
+    match /recommendations/{recId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+  }
+}
